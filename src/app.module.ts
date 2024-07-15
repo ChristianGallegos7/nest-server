@@ -3,6 +3,8 @@ import { EmpresaModule } from './auth/empresa/empresa.module';
 import { UsuariosModule } from './auth/usuarios/usuarios.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { RolModule } from './rol/rol.module';
+import { CommonModule } from './common/common.module';
 
 
 
@@ -18,7 +20,9 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true
-    })
+    }),
+    RolModule,
+    CommonModule
   ],
 })
 export class AppModule { }

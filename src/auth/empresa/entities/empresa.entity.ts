@@ -3,8 +3,9 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 @Entity()
 @Unique(["ruc", "email"])
 export class Empresa {
-    @PrimaryGeneratedColumn()
-    id: number;
+    
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column()
     nombre: string;
