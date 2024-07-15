@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
+@Unique(["ruc", "email"])
 export class Empresa {
     @PrimaryGeneratedColumn()
     id: number;
@@ -8,12 +9,21 @@ export class Empresa {
     @Column()
     nombre: string;
 
-    @Column()
+    @Column('text')
     direccion: string;
+
+    @Column('text')
+    ruc: string;
 
     @Column()
     telefono: string;
 
-    @Column()
+    @Column('text')
     email: string;
+
+    @Column('text')
+    password: string;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
 }
