@@ -13,7 +13,7 @@ export class EmpresaService {
   constructor(
     @InjectRepository(Empresa)
     private readonly empresaRepository: Repository<Empresa>
-  ) {}
+  ) { }
 
   async create(createEmpresaDto: CreateEmpresaDto) {
     try {
@@ -44,6 +44,7 @@ export class EmpresaService {
       }
 
       return empresa;
+
     } catch (error) {
       this.manejoExceptions(error);
     }
@@ -80,6 +81,8 @@ export class EmpresaService {
   private manejoExceptions(error: any) {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
+    } else if (error instanceof NotFoundException) {
+      throw error;  // Rethrow the NotFoundException
     }
     this.logger.error(error);
     throw new InternalServerErrorException("Error inesperado, check server logs");
