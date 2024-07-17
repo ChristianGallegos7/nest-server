@@ -4,6 +4,7 @@ import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { Empresa } from './entities/empresa.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class EmpresaService {
@@ -25,10 +26,17 @@ export class EmpresaService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
+
+    const { limit = 10, offset = 0 } = paginationDto;
+
     try {
-      const empresas = await this.empresaRepository.find();
-      return empresas;
+      return await this.empresaRepository.find({
+        take: limit,
+        skip: offset,
+        
+      });
+
     } catch (error) {
       this.manejoExceptions(error);
     }

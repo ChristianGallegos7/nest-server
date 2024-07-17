@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query } from '@nestjs/common';
 import { EmpresaService } from './empresa.service';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('empresa')
 export class EmpresaController {
-  constructor(private readonly empresaService: EmpresaService) {}
+  constructor(private readonly empresaService: EmpresaService) { }
 
   @Post()
   create(@Body() createEmpresaDto: CreateEmpresaDto) {
@@ -13,8 +14,8 @@ export class EmpresaController {
   }
 
   @Get()
-  findAll() {
-    return this.empresaService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.empresaService.findAll(paginationDto);
   }
 
   @Get(':id')
