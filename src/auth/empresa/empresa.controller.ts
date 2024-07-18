@@ -24,7 +24,9 @@ export class EmpresaController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateEmpresaDto: UpdateEmpresaDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string, 
+    @Body() updateEmpresaDto: UpdateEmpresaDto) {
     return this.empresaService.update(id, updateEmpresaDto);
   }
 
