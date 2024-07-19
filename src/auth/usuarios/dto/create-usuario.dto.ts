@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength, IsInt, Min, Max, IsPhoneNumber } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength, IsInt, Min, Max, IsPhoneNumber, Matches } from 'class-validator';
 
 export class CreateUsuarioDto {
     
@@ -28,6 +28,8 @@ export class CreateUsuarioDto {
     @Max(120)
     edad: number;
 
-    @IsPhoneNumber(null)
+   
+    @IsNotEmpty({ message: 'El teléfono es obligatorio' })
+    @Matches(/^[0-9]{10}$/, { message: 'El teléfono debe tener 10 dígitos numéricos' })
     telefono: string;
 }

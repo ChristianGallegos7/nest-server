@@ -1,29 +1,26 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class Usuario {
+
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    nombre:string;
+    @Column({ type: 'varchar', length: 50 })
+    nombre: string;
 
-    @Column()
-    apellido:string;
+    @Column({ type: 'varchar', length: 50 })
+    apellido: string;
 
-    @Column()
-    email:string;
+    @Column({ type: 'varchar', unique: true })
+    email: string;
 
-    @Column()
-    password:string;
+    @Column({ type: 'varchar' })
+    password: string;
 
-    @Column()
-    edad:number;
+    @Column({ type: 'int' })
+    edad: number;
 
-    @Column()
-    telefono:string;
-
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    createdAt: Date;
+    @Column({ type: 'varchar', length: 15 })
+    telefono: string;
 }

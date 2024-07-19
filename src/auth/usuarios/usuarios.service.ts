@@ -1,26 +1,97 @@
-import { Injectable } from '@nestjs/common';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Usuario } from './entities/usuario.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsuariosService {
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
+
+  constructor(
+    @InjectRepository(Usuario)
+    private readonly usuarioRepository: Repository<Usuario>
+  ) { }
+
+
+  async create(createUsuarioDto: CreateUsuarioDto) {
+    try {
+      const usuario = this.usuarioRepository.create(createUsuarioDto);
+      await this.usuarioRepository.save(usuario);
+      return usuario;
+    } catch (error) {
+      this.manejoExceptions(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all usuarios`;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+    try {
+      const usuarios = await this.usuarioRepository.find({
+        take: limit,
+        skip: offset,
+      });
+      return usuarios;
+    } catch (error) {
+      this.manejoExceptions(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async findOne(id: number) {
+    try {
+      const usuario = await this.usuarioRepository.findOneBy({ id });
+
+      if (!usuario) {
+        throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+      }
+
+      return usuario;
+    } catch (error) {
+      this.manejoExceptions(error);
+    }
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    try {
+      const usuario = await this.usuarioRepository.preload({
+        id: id,
+        ...updateUsuarioDto
+      });
+
+      if (!usuario) {
+        throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+      }
+
+      await this.usuarioRepository.save(usuario);
+
+    } catch (error) {
+      this.manejoExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async remove(id: number) {
+    try {
+      const usuario = await this.usuarioRepository.findOneBy({ id });
+
+      if (!usuario) {
+        throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+      }
+
+      await this.usuarioRepository.remove(usuario);
+
+    } catch (error) {
+      this.manejoExceptions(error);
+    }
   }
+
+  private manejoExceptions(error: any) {
+    if (error.code === '23505') {
+      throw new BadRequestException(error.detail);
+    } else if (error instanceof NotFoundException) {
+      throw error;  // Rethrow the NotFoundException
+    }
+    throw new InternalServerErrorException("Error inesperado, check server logs");
+  }
+
 }
