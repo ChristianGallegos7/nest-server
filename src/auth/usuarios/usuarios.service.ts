@@ -1,3 +1,4 @@
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -24,9 +25,13 @@ export class UsuariosService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
     try {
-      const usuarios = await this.usuarioRepository.find();
+      const usuarios = await this.usuarioRepository.find({
+        take: limit,
+        skip: offset,
+      });
       return usuarios;
     } catch (error) {
       this.manejoExceptions(error);
