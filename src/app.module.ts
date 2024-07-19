@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { RolModule } from './rol/rol.module';
 import { CommonModule } from './common/common.module';
+import { FilesModule } from './files/files.module';
 
 
 
@@ -22,7 +23,8 @@ import { CommonModule } from './common/common.module';
       synchronize: true
     }),
     RolModule,
-    CommonModule
+    CommonModule,
+    FilesModule
   ],
 })
 export class AppModule { }
