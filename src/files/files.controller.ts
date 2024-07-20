@@ -3,6 +3,7 @@ import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { fileFilter } from './helpers/fileFilter.helper';
+import { diskStorage } from 'multer';
 
 @Controller('files')
 export class FilesController {
@@ -11,7 +12,11 @@ export class FilesController {
   @Post('cv')
   // Interceptor para validar que el cv solo se pueda subir como pdf
   @UseInterceptors(FileInterceptor('file', {
-    fileFilter: fileFilter
+    fileFilter: fileFilter,
+    limits: { fileSize: 1024 * 1024 * 5 },
+    storage: diskStorage({
+      destination: './static/cvs'
+    })
   }))
 
   //Funcion para subir el archivo
