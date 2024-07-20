@@ -4,6 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { fileFilter } from './helpers/fileFilter.helper';
 import { diskStorage } from 'multer';
+import { fileNamer } from './helpers/fileNamer.helper';
 
 @Controller('files')
 export class FilesController {
@@ -15,14 +16,15 @@ export class FilesController {
     fileFilter: fileFilter,
     limits: { fileSize: 1024 * 1024 * 5 },
     storage: diskStorage({
-      destination: './static/cvs'
+      destination: './static/cvs',
+      filename: fileNamer
     })
   }))
 
   //Funcion para subir el archivo
   uploadFile(@UploadedFile() file: Express.Multer.File) {
 
-    if(!file){
+    if (!file) {
       throw new BadRequestException("El cv tiene que ser un pdf")
     }
 
