@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
+@Entity('users')
 export class Usuario {
 
     @PrimaryGeneratedColumn()
@@ -15,7 +15,7 @@ export class Usuario {
     @Column({ type: 'varchar', unique: true })
     email: string;
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', select: false })
     password: string;
 
     @Column({ type: 'int' })
@@ -23,4 +23,10 @@ export class Usuario {
 
     @Column({ type: 'varchar', length: 15 })
     telefono: string;
+
+    @Column('text', {
+        array: true,
+        default: ['user']
+    })
+    roles: string[];
 }
