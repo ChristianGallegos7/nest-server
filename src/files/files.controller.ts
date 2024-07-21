@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -9,6 +9,16 @@ import { fileNamer } from './helpers/fileNamer.helper';
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) { }
+
+  @Get('cv/:cv')
+  findCv(
+    @Param('cv') cv: string
+  ) {
+    return cv;
+  }
+
+
+
 
   @Post('cv')
   // Interceptor para validar que el cv solo se pueda subir como pdf
