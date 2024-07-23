@@ -116,6 +116,7 @@ export class UsuariosService {
 
     delete usuario.password;
     return usuario;
+    //falta el jwt
   }
 
   private handleExceptions(error: any) {
